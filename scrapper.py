@@ -1,7 +1,7 @@
 #
 #   Title:     Offensive Tweets Recognization 
 #   Authors:   Himanshu Bansal
-#              Anita Soboleba
+#              Anita Soloveva
 #              Daniel Nagel
 #
 #   File Name: scrapper.py
