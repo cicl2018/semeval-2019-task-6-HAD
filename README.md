@@ -26,7 +26,7 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 2. LSTM with fasttext vectors <br/>
 ### Sub-task A
 1. Using an additional preprocessed training set of tweets <br/>
-2. Postprocessing with emojis set and offensive word list
+2. Postprocessing with emojis set and an offensive word list
 ### Sub-task B & Sub-task C
 1. Using a list of ethnic slurs
 2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain](https://www.socialbakers.com/statistics/twitter/profiles/)
