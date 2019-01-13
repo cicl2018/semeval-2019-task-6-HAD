@@ -19,6 +19,16 @@ We are using Long short-term memory network (LSTM) as a main model.
 ## Pre-processing
 
 1. Removing URLs and @USER <br/>
-2. Parsing hashtags (See [Christos Baziotis et.al 2017](https://github.com/cbaziotis/ekphrasis))<br/>
+2. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
+
+## Approaches
+
+1. LSTM <br/>
+2. LSTM with fasttext vectors <br/>
+### Sub-task A
+1. Using additional pre-processed training set of tweets <br/>
+ 
+### Sub-task B
+1. 
 
 
