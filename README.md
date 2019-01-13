@@ -1,5 +1,5 @@
 # Semeval-2019-task-6-HAD
-Evaluation of Offensive Tweets with target Classification. For more detail: https://competitions.codalab.org/competitions/20011
+Evaluation of Offensive Tweets with target Classification. For more detail: [CodaLab](https://competitions.codalab.org/competitions/20011)
 
 ## Sub-tasks
 
@@ -18,5 +18,7 @@ We are using Long short-term memory network (LSTM) as a main model.
 
 ## Pre-processing
 
-## 
+### Removing URLs <br/>
+### Parsing hashtags
+
 
