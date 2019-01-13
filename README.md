@@ -9,5 +9,5 @@ Sub-task C - Offense target identification.  <br/>
 
 ## Team 
 Himanshu Bansal <br/>
-Daniel <br/>
+Daniel Nagel <br/>
 Anita Soloveva <br/>
