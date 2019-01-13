@@ -19,6 +19,6 @@ We are using Long short-term memory network (LSTM) as a main model.
 ## Pre-processing
 
 ### Removing URLs <br/>
-### Parsing hashtags ([See Christos Baziotis et.al 2017](https://github.com/cbaziotis/ekphrasis))<br/>
+### Parsing hashtags (See [Christos Baziotis et.al 2017](https://github.com/cbaziotis/ekphrasis))<br/>
 
 
