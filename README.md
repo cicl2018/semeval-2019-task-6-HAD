@@ -14,6 +14,9 @@ Sub-task C - Offense target identification.  <br/>
 
 ## Model
 
-We are using Long short-term memory (LSTM) model
+We are using Long short-term memory network (LSTM) as a main model.
 
+## Pre-processing
+
+## 
 
