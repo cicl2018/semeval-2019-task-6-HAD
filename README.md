@@ -12,10 +12,6 @@ Sub-task C - Offense target identification.  <br/>
 **Daniel Nagel** Universität Tübingen <br/>
 **Anita Soloveva**  Lomonosov MSU, Universität Tübingen <br/>
 
-## Model
-
-We are using Long short-term memory network (LSTM) as a main model.
-
 ## Pre-processing
 
 1. Removing URLs and @USER <br/>
@@ -23,7 +19,7 @@ We are using Long short-term memory network (LSTM) as a main model.
 
 ## Our approaches
 
-1. LSTM <br/>
+1. We are using Long short-term memory network (LSTM) as a main model. <br/>
 2. LSTM with fasttext vectors <br/>
 ### Sub-task A
 1. Using additional pre-processed training set of tweets <br/>
