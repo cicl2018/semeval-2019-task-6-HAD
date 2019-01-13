@@ -3,11 +3,11 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 
 ## Sub-tasks
 
-### Sub-task A - Offensive language identification <br/>
+### Sub-task A - Offensive language identification (Offensive / Not Offensive) <br/>
  - **15 Jan 2019:** A test data release - **17 Jan 2019:** Submission deadline <br/>
-### Sub-task B - Automatic categorization of offense types <br/> 
+### Sub-task B - Automatic categorization of offense types (Targeted Insult and Threats / Untargeted) <br/> 
 - **22 Jan 2019:** A test data release - **24 Jan 2019:** Submission deadline <br/>
-### Sub-task C - Offense target identification <br/>
+### Sub-task C - Offense target identification (Target: Individual / Group / Other)<br/>
  - **29 Jan 2019:** A test data release - **31 Jan 2019:** Submission deadline  <br/>
 
 ## Contributors 
