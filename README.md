@@ -3,9 +3,9 @@ Evaluation of Offensive Tweets with target Classification. For more detail: [Cod
 
 ## Sub-tasks
 
-Sub-task A - Offensive language identification;  **15 Jan 2019:** A test data release (00:00 UTC) - **17 Jan 2019:** Submission deadline (23:59 UTC) <br/>
-Sub-task B - Automatic categorization of offense types;  **22 Jan 2019:** A test data release (00:00 UTC) - **24 Jan 2019:** Submission deadline (23:59 UTC)<br/>
-Sub-task C - Offense target identification.  **29 Jan 2019:** A test data release (00:00 UTC) - **31 Jan 2019:** Submission deadline (23:59 UTC) <br/>
+Sub-task A - Offensive language identification;  **15 Jan 2019:** A test data release - **17 Jan 2019:** Submission deadline <br/>
+Sub-task B - Automatic categorization of offense types;  **22 Jan 2019:** A test data release - **24 Jan 2019:** Submission deadline <br/>
+Sub-task C - Offense target identification.  **29 Jan 2019:** A test data release - **31 Jan 2019:** Submission deadline  <br/>
 
 ## Contributors 
 **Himanshu Bansal** Universität Tübingen <br/>
