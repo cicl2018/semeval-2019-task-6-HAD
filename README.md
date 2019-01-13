@@ -9,8 +9,8 @@ Sub-task C - Offense target identification.  <br/>
 
 ## Team 
 Himanshu Bansal &emsp; Universität Tübingen <br/>
-Daniel Nagel Universität Tübingen <br/>
-Anita Soloveva Lomonosov MSU, Universität Tübingen <br/>
+Daniel Nagel &emsp; Universität Tübingen <br/>
+Anita Soloveva &emsp; Lomonosov MSU, Universität Tübingen <br/>
 
 ## Model
 
