@@ -8,7 +8,7 @@ Sub-task B - Automatic categorization of offense types; <br/>
 Sub-task C - Offense target identification.  <br/>
 
 ## Team 
-Himanshu Bansal    Universität Tübingen <br/>
+Himanshu Bansal &amp; Universität Tübingen <br/>
 Daniel Nagel Universität Tübingen <br/>
 Anita Soloveva Lomonosov MSU, Universität Tübingen <br/>
 
