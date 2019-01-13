@@ -21,7 +21,7 @@ We are using Long short-term memory network (LSTM) as a main model.
 1. Removing URLs and @USER <br/>
 2. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
 
-## Approaches
+## Our approaches
 
 1. LSTM <br/>
 2. LSTM with fasttext vectors <br/>
