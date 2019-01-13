@@ -1,5 +1,5 @@
 # Semeval-2019-task-6-HAD
-Evaluation of Offensive Tweets with target Classification. For more detail: [Coda Lab_OffensEval 2019 (SemEval 2019 - Task 6)](https://competitions.codalab.org/competitions/20011)
+Evaluation of Offensive Tweets with target Classification. For more details: [Coda Lab_OffensEval 2019 (SemEval 2019 - Task 6)](https://competitions.codalab.org/competitions/20011)
 
 ## Sub-tasks
 
