@@ -3,9 +3,9 @@ Evaluation of Offensive Tweets with target Classification. For more detail: [Cod
 
 ## Sub-tasks
 
-Sub-task A - Offensive language identification;  <br/>
-Sub-task B - Automatic categorization of offense types; <br/>
-Sub-task C - Offense target identification.  <br/>
+Sub-task A - Offensive language identification;  **15 Jan 2019:** A test data release (00:00 UTC) - **17 Jan 2019:** Submission deadline (23:59 UTC) <br/>
+Sub-task B - Automatic categorization of offense types;  **22 Jan 2019:** A test data release (00:00 UTC) - **24 Jan 2019:** Submission deadline (23:59 UTC)<br/>
+Sub-task C - Offense target identification.  **29 Jan 2019:** A test data release (00:00 UTC) - **31 Jan 2019:** Submission deadline (23:59 UTC) <br/>
 
 ## Contributors 
 **Himanshu Bansal** Universität Tübingen <br/>
@@ -22,7 +22,7 @@ Sub-task C - Offense target identification.  <br/>
 1. We are using [Long short-term memory network (LSTM) model](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/script.py). <br/>
 2. LSTM with fasttext vectors <br/>
 ### Sub-task A
-1. Using an additional pre-processed training set of tweets <br/>
+1. Using an additional preprocessed training set of tweets <br/>
 2. Postprocessing with emojis set and offensive word list
 ### Sub-task B && C
 1. Using a list of ethnic slurs
