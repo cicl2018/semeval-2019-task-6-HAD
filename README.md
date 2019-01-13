@@ -12,19 +12,20 @@ Sub-task C - Offense target identification.  <br/>
 **Daniel Nagel** Universität Tübingen <br/>
 **Anita Soloveva**  Lomonosov MSU, Universität Tübingen <br/>
 
-## Pre-processing
+## Preprocessing
 
 1. Removing URLs and @USER <br/>
 2. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
 
 ## Our approaches
 
-1. We are using Long short-term memory network (LSTM) as a main model. <br/>
+1. We are using [Long short-term memory network (LSTM) model](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/script.py). <br/>
 2. LSTM with fasttext vectors <br/>
 ### Sub-task A
-1. Using additional pre-processed training set of tweets <br/>
- 
-### Sub-task B
-1. 
+1. Using an additional pre-processed training set of tweets <br/>
+2. Postprocessing with emojis set and offensive word list
+### Sub-task B && C
+1. Using a list of ethnic slurs
+2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain] (https://www.socialbakers.com/statistics/twitter/profiles/)
 
 
