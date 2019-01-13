@@ -29,6 +29,6 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 2. Postprocessing with emojis set and offensive word list
 ### Sub-task B && C
 1. Using a list of ethnic slurs
-2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain] (https://www.socialbakers.com/statistics/twitter/profiles/)
+2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain](https://www.socialbakers.com/statistics/twitter/profiles/)
 
 
