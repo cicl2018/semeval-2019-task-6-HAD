@@ -3,6 +3,6 @@ Evaluation of Offensive Tweets with target Classification. For more detail: http
 
 ## Sub-tasks
 
-Sub-task A - Offensive language identification;
-Sub-task B - Automatic categorization of offense types;
-Sub-task C - Offense target identification.
+Sub-task A - Offensive language identification; \\
+Sub-task B - Automatic categorization of offense types; \\
+Sub-task C - Offense target identification.  \\
