@@ -25,13 +25,13 @@ tw = Segmenter(corpus="twitter")
 # Configuration class for training model.
 class Configuration:
 	num_epochs = 500
-	size_batch = 256
+	size_batch = 64
 	max_time_steps = 40
 	LSTM_CT = 4
 	LSTM_SZ = 200
 	ratio_dropout = 0.95
 	embedding_size = 100
-	rate_learning = 0.01
+	rate_learning = 0.005
 
 class PredictionPhase(Enum):
 	Training = 0
@@ -236,7 +236,9 @@ def model_training(configuration, train_batches, validation_batches, number):
 	validation_batches, validation_lens, validation_labels = validation_batches
 	n_chars = max(np.amax(validation_batches), np.amax(train_batches)) + 1
 	tf.reset_default_graph()
-	with tf.Session() as sess:
+	config = tf.ConfigProto()
+	config.gpu_options.allow_growth=True
+	with tf.Session(config=config) as sess:
 		with tf.variable_scope("model", reuse=False):
 			model_training = LSTMModel( configuration, train_batches, train_lens, train_labels, n_chars, number,
 				phase=PredictionPhase.Training)
