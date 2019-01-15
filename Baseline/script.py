@@ -236,9 +236,8 @@ def model_training(configuration, train_batches, validation_batches, number):
 	validation_batches, validation_lens, validation_labels = validation_batches
 	n_chars = max(np.amax(validation_batches), np.amax(train_batches)) + 1
 	tf.reset_default_graph()
-	config = tf.ConfigProto()
-	config.gpu_options.allow_growth=True
-	with tf.Session(config=config) as sess:
+
+	with tf.Session() as sess:
 		with tf.variable_scope("model", reuse=False):
 			model_training = LSTMModel( configuration, train_batches, train_lens, train_labels, n_chars, number,
 				phase=PredictionPhase.Training)
