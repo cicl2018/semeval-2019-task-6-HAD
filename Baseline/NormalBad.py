@@ -310,7 +310,7 @@ def model_training(configuration, train_batches, validation_batches, number):
 								validation_labels[batch][item][1] = 1
 							
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
-			with open ("off.txt", "r+") as off:
+			with open ("off.txt", "r") as off:
 				with open (str(f1 * 100) + ".txt", "w+") as w:
 						with open("numbers.txt", "r+") as f:
 							data = set(f.readlines())
