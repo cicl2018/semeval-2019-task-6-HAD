@@ -335,24 +335,24 @@ if __name__ == "__main__":
 	validation_lexicon = lexicon_read(sys.argv[2], "TEST")
 	
 
-	# train_lexicon = lexicon_recode(train_lexicon, words, labels, train=True)
-	# validation_lexicon = lexicon_recode(validation_lexicon, words, labels)
+	train_lexicon = lexicon_recode(train_lexicon, words, labels, train=True)
+	validation_lexicon = lexicon_recode(validation_lexicon, words, labels)
 
-	# # Generate batches
-	# train_batches = generate_instances(
-	# 	train_lexicon[0],
-	# 	labels,
-	# 	configuration.max_time_steps,
-	# 	size_batch=configuration.size_batch)
+	# Generate batches
+	train_batches = generate_instances(
+		train_lexicon[0],
+		labels,
+		configuration.max_time_steps,
+		size_batch=configuration.size_batch)
 	
-	# validation_batches = generate_instances(
-	# 	validation_lexicon[0],
-	# 	labels,
-	# 	configuration.max_time_steps,
-	# 	size_batch=configuration.size_batch)
+	validation_batches = generate_instances(
+		validation_lexicon[0],
+		labels,
+		configuration.max_time_steps,
+		size_batch=configuration.size_batch)
 
-	# # Training the model
-	# model_training(configuration, train_batches, validation_batches, words)
+	# Training the model
+	model_training(configuration, train_batches, validation_batches, words)
 
 	# # Generate batches
 	# train_batches = generate_instances(
