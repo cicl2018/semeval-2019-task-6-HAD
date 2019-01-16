@@ -323,10 +323,10 @@ def model_training(configuration, train_batches, validation_batches, number):
 									print (type(bad_word))
 									print (type(all_text[item][0]))
 									# if int(bad_word) in all_text[item]:
-										print (bad_word)
-										print ("bad word")
-										print (all_labels[item])
-										break
+										# print (bad_word)
+										# print ("bad word")
+										# print (all_labels[item])
+										# break
 								# for element in all_text[item]:
 								# 	for bit in data:
 								# 		if str(element) == str(bit.split("\t")[1].replace("\n", "")):
