@@ -310,30 +310,30 @@ def model_training(configuration, train_batches, validation_batches, number):
 								validation_labels[batch][item][1] = 1
 							
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
-			with open ("offNew.txt", "r+") as off:
+			with open ("off.txt", "r+") as off:
 				with open (str(f1 * 100) + ".txt", "w+") as w:
 						with open("numbers.txt", "r+") as f:
 							data = set(f.readlines())
 							for item in range(len(all_text)):
 								tweets = []
+								for element in all_text[item]:
+									for bit in data:
+										if str(element) == str(bit.split("\t")[1].replace("\n", "")):
+											tweets.append(bit.split("\t")[0])
+											break
+
 								for bad_word in off.readlines():
-									for bitting in all_text[item]:
-										if str(bad_word) == int(bitting):
-											print (bad_word)
-											print ("bad word")
-											print (all_labels[item])
-									for element in all_text[item]:
-										for bit in data:
-											if str(element) == str(bit.split("\t")[1].replace("\n", "")):
-												tweets.append(bit.split("\t")[0])
-												break
-							
-							if str(all_labels[item]) == "0":
-								w.write(" ".join(tweets) + " LOSS\n")
-							elif str(all_labels[item]) == "1":
-								w.write (" ".join(tweets) + " OFF\n")
-							elif str(all_labels[item]) == "2":
-								w.write (" ".join(tweets) + " NOT\n")
+									if bad_word in tweets:
+										print (bad_word)
+										print ("bad word")
+										print (all_labels[item])
+						
+								if str(all_labels[item]) == "0":
+									w.write(" ".join(tweets) + " LOSS\n")
+								elif str(all_labels[item]) == "1":
+									w.write (" ".join(tweets) + " OFF\n")
+								elif str(all_labels[item]) == "2":
+									w.write (" ".join(tweets) + " NOT\n")
 
 
 if __name__ == "__main__":
