@@ -326,16 +326,15 @@ def model_training(configuration, train_batches, validation_batches, number):
 
 							for bad_word in bad_list:
 								if bad_word in tweets:
-									print (bad_word)
-									print ("bad word")
-									print (tweets)
+									all_labels[item] = 1
+									break
 					
-							# if str(all_labels[item]) == "0":
-							# 	w.write(" ".join(tweets) + " LOSS\n")
-							# elif str(all_labels[item]) == "1":
-							# 	w.write (" ".join(tweets) + " OFF\n")
-							# elif str(all_labels[item]) == "2":
-							# 	w.write (" ".join(tweets) + " NOT\n")
+							if str(all_labels[item]) == "0":
+								w.write(" ".join(tweets) + " LOSS\n")
+							elif str(all_labels[item]) == "1":
+								w.write (" ".join(tweets) + " OFF\n")
+							elif str(all_labels[item]) == "2":
+								w.write (" ".join(tweets) + " NOT\n")
 
 
 if __name__ == "__main__":
