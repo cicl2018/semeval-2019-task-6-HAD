@@ -312,7 +312,6 @@ def model_training(configuration, train_batches, validation_batches, number):
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
 			with open ("offNew.txt", "r+") as off:
 				with open (str(f1 * 100) + ".txt", "w+") as w:
-					
 						with open("numbers.txt", "r+") as f:
 							data = set(f.readlines())
 							for item in range(len(all_text)):
@@ -321,7 +320,7 @@ def model_training(configuration, train_batches, validation_batches, number):
 									# print (type(bad_word))
 									# print (type(all_text[item]))
 									# print (all_text[item])
-									# print (bad_word)
+									print (bad_word)
 									if int(bad_word) in all_text[item]:
 										print (bad_word)
 										print ("bad word")
