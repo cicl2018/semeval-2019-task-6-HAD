@@ -317,10 +317,11 @@ def model_training(configuration, train_batches, validation_batches, number):
 							for item in range(len(all_text)):
 								tweets = []
 								for bad_word in off.readlines():
-									if int(bad_word) in all_text[item]:
-										print (bad_word)
-										print ("bad word")
-										print (all_labels[item])
+									for bitting in all_text[item]:
+										if int(bad_word) == int(bitting):
+											print (bad_word)
+											print ("bad word")
+											print (all_labels[item])
 									for element in all_text[item]:
 										for bit in data:
 											if str(element) == str(bit.split("\t")[1].replace("\n", "")):
