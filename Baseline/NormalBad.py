@@ -318,6 +318,10 @@ def model_training(configuration, train_batches, validation_batches, number):
 							for item in range(len(all_text)):
 								tweets = []
 								for bad_word in off.readlines():
+									print (type(bad_word))
+									print (type(all_text[item]))
+									print (all_text[item])
+									print (bad_word)
 									if bad_word in all_text[item]:
 										print (bad_word)
 										print ("bad word")
