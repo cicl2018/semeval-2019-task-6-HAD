@@ -160,15 +160,17 @@ class Numbers:
 def pre_processing(text):
 	# @ striping
 	text = re.sub(r"@[^\s]+", "", text)
+	text = text.lower()
+	text = text.replace("URL", "")
+	text = text.replace("=", " ")
 	# text = re.sub(r"^[^\d]$", "", text)
 	# parse hashtags
 	if not re.match(r"#[^\s]+", text) == None:
 		values = re.match(r"#[^\s]+", text).group()
 		text = re.sub(r"#[^\s]+", tw.segment(values), text)
-	# USER removal
+	# # USER removal
 	text = text.replace("@USER", "")
-	# URL removal 
-	text = text.replace("URL", "")
+	# # URL removal 
 	text = text.replace("#", "")
 	return text
 

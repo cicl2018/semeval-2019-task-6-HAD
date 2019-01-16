@@ -25,7 +25,7 @@ tw = Segmenter(corpus="twitter")
 # Configuration class for training model.
 class Configuration:
 	num_epochs = 500
-	size_batch = 1
+	size_batch = 43
 	max_time_steps = 40
 	LSTM_CT = 4
 	LSTM_SZ = 200
