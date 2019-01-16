@@ -326,11 +326,11 @@ def model_training(configuration, train_batches, validation_batches, number):
 										print ("bad word")
 										print (all_labels[item])
 										break
-								for element in all_text[item]:
-									for bit in data:
-										if str(element) == str(bit.split("\t")[1].replace("\n", "")):
-											tweets.append(bit.split("\t")[0])
-											break
+								# for element in all_text[item]:
+								# 	for bit in data:
+								# 		if str(element) == str(bit.split("\t")[1].replace("\n", "")):
+								# 			tweets.append(bit.split("\t")[0])
+								# 			break
 							
 							if str(all_labels[item]) == "0":
 								w.write(" ".join(tweets) + " LOSS\n")
