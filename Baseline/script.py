@@ -25,7 +25,7 @@ tw = Segmenter(corpus="twitter")
 # Configuration class for training model.
 class Configuration:
 	num_epochs = 500
-	size_batch = 64
+	size_batch = 43
 	max_time_steps = 40
 	LSTM_CT = 4
 	LSTM_SZ = 200
@@ -144,6 +144,7 @@ class Numbers:
 				self.vector_to_number[values] = n
 				self.number_to_vector.append(values)
 			else:
+				print (values)
 				return 0
 
 		return n
@@ -159,7 +160,7 @@ class Numbers:
 def pre_processing(text):
 	# @ striping
 	text = re.sub(r"@[^\s]+", "", text)
-	text = re.sub(r"^[^\d]$", "", text)
+	# text = re.sub(r"^[^\d]$", "", text)
 	# parse hashtags
 	if not re.match(r"#[^\s]+", text) == None:
 		values = re.match(r"#[^\s]+", text).group()
@@ -168,17 +169,21 @@ def pre_processing(text):
 	text = text.replace("@USER", "")
 	# URL removal 
 	text = text.replace("URL", "")
+	text = text.replace("#", "")
 	return text
 
 
-def lexicon_read(filename):
+def lexicon_read(filename, type):
 	with open(filename, "r") as f:
 		lex = {}
 		for line in f:
 			fields = line.split("\t")
 			if len(fields) > 1 :
 				# lex[pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}, "Task2":{fields[3].strip():1.0}, "Task3":{fields[4].strip():1.0}}
-				lex[pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}}
+				if type == "TRAIN":
+					lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}}
+				else:
+					lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{"OFF":1.0}}
 		return lex
 
 
@@ -186,20 +191,25 @@ def lexicon_recode(lex, words, labels, train=False):
 	int_lex_task1 = []
 	int_lex_task2 = []
 	int_lex_task3 = []
-	for (line, tags) in lex.items():
-		int_sentence = []
-		for word in line.split():
-			int_sentence.append(words.num(word, train))
-		int_tags_task1 = {}
-		int_tags_task2 = {}
-		int_tags_task3 = {}
-		for (tag, p) in tags["Task1"].items():
-			int_tags_task1[labels.num(tag, train)] = p
-		# for (tag, p) in tags["Task2"].items():
-		# 	int_tags_task2[labels.num(tag, train)] = p
-		# for (tag, p) in tags["Task3"].items():
-		# 	int_tags_task3[labels.num(tag, train)] = p
-		int_lex_task1.append((int_sentence, int_tags_task1))
+	with open ("numbers.txt", "w+") as writing:
+		for (line, tags) in lex.items():
+			int_sentence = []
+			for word in line.split():
+				writing.write(word + "\t" + str(words.num(str(word), True)) + "\n")
+				int_sentence.append(words.num(word, train))
+
+			int_tags_task1 = {}
+			int_tags_task2 = {}
+			int_tags_task3 = {}
+			for (tag, p) in tags["Task1"].items():
+				int_tags_task1[labels.num(tag, train)] = p
+			# for (tag, p) in tags["Task2"].items():
+			# 	int_tags_task2[labels.num(tag, train)] = p
+			# for (tag, p) in tags["Task3"].items():
+			# 	int_tags_task3[labels.num(tag, train)] = p
+			
+			int_lex_task1.append((int_sentence, int_tags_task1))
+			
 		# int_lex_task2.append((int_sentence, int_tags_task2))
 		# int_lex_task3.append((int_sentence, int_tags_task3))
 	# return [int_lex_task1, int_lex_task2, int_lex_task3]
@@ -219,7 +229,6 @@ def generate_instances( whole_batch_data, max_label, max_time_steps, size_batch=
 	for batch_current in range(batch_num):
 		for index in range(size_batch):
 			(line, l) = whole_batch_data[(batch_current * size_batch) + index]
-			
 			for label, prob in l.items(): # Add label distribution
 				labels[batch_current, index, label] = prob
 			# Sequence
@@ -260,7 +269,8 @@ def model_training(configuration, train_batches, validation_batches, number):
 			f1 = 0.0
 
 
-			
+			all_text = []
+			all_labels = []
 			for batch_current in range(validation_batches.shape[0]): # validation on all batches.
 				loss, acc, hpl = sess.run([validation_model.loss, validation_model.accuracy, validation_model.hp_labels], {
 					validation_model.x: validation_batches[batch_current], validation_model.lens: validation_lens[batch_current], validation_model.y: validation_labels[batch_current]})
@@ -269,7 +279,10 @@ def model_training(configuration, train_batches, validation_batches, number):
 				precision += metrics.precision_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				recall += metrics.recall_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				f1 += metrics.f1_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
-			
+				for item in range(len(hpl.tolist())):
+					all_text.append(validation_batches[batch_current][item].tolist())
+					all_labels.append(str(hpl.tolist()[item]))
+
 			
 			for batch_current in range(train_batches.shape[0]): # Training on all batches.
 				loss, _ = sess.run([model_training.loss, model_training.train_op], {
@@ -284,6 +297,23 @@ def model_training(configuration, train_batches, validation_batches, number):
 			f1 /= validation_batches.shape[0]
 
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
+			with open (str(f1 * 100) + ".txt", "w+") as w:
+				with open("numbers.txt", "r+") as f:
+					data = set(f.readlines())
+					for item in range(len(all_text)):
+						tweets = []
+						for element in all_text[item]:
+							for bit in data:
+								if str(element) == str(bit.split("\t")[1].replace("\n", "")):
+									tweets.append(bit.split("\t")[0])
+									break
+						
+						if str(all_labels[item]) == "0":
+							w.write(" ".join(tweets) + " LOSS\n")
+						elif str(all_labels[item]) == "2":
+							w.write (" ".join(tweets) + " OFF\n")
+						elif str(all_labels[item]) == "1":
+							w.write (" ".join(tweets) + " NOT\n")
 
 
 if __name__ == "__main__":
@@ -298,13 +328,12 @@ if __name__ == "__main__":
 	labels = Numbers()
 
 	# Read training, validation, and embedding whole_batch_data.
-	train_lexicon = lexicon_read(sys.argv[1])
-	validation_lexicon = lexicon_read(sys.argv[2])
+	train_lexicon = lexicon_read(sys.argv[1], "TRAIN")
+	validation_lexicon = lexicon_read(sys.argv[2], "TEST")
 	
 
 	train_lexicon = lexicon_recode(train_lexicon, words, labels, train=True)
 	validation_lexicon = lexicon_recode(validation_lexicon, words, labels)
-
 
 	# Generate batches
 	train_batches = generate_instances(
