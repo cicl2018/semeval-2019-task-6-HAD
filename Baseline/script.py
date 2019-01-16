@@ -310,9 +310,9 @@ def model_training(configuration, train_batches, validation_batches, number):
 						
 						if str(all_labels[item]) == "0":
 							w.write(" ".join(tweets) + " LOSS\n")
-						elif str(all_labels[item]) == "2":
-							w.write (" ".join(tweets) + " OFF\n")
 						elif str(all_labels[item]) == "1":
+							w.write (" ".join(tweets) + " OFF\n")
+						elif str(all_labels[item]) == "2":
 							w.write (" ".join(tweets) + " NOT\n")
 
 
