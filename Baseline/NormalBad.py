@@ -321,7 +321,7 @@ def model_training(configuration, train_batches, validation_batches, number):
 									if bad_word in item:
 										print (bad_word)
 										print ("bad word")
-										print all_labels[item]
+										print (all_labels[item])
 										break
 								for element in all_text[item]:
 									for bit in data:
