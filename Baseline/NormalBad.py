@@ -322,20 +322,21 @@ def model_training(configuration, train_batches, validation_batches, number):
 											tweets.append(bit.split("\t")[0])
 											break
 
-								for bad_word in off.readlines():
-									print (bad_word)
+								print (off.readlines())
+								# for bad_word in off.readlines():
+								# 	print (bad_word)
 									# print (tweets)
 									# if bad_word in tweets:
 									# 	print (bad_word)
 									# 	print ("bad word")
 									# 	print (all_labels[item])
 						
-								if str(all_labels[item]) == "0":
-									w.write(" ".join(tweets) + " LOSS\n")
-								elif str(all_labels[item]) == "1":
-									w.write (" ".join(tweets) + " OFF\n")
-								elif str(all_labels[item]) == "2":
-									w.write (" ".join(tweets) + " NOT\n")
+								# if str(all_labels[item]) == "0":
+								# 	w.write(" ".join(tweets) + " LOSS\n")
+								# elif str(all_labels[item]) == "1":
+								# 	w.write (" ".join(tweets) + " OFF\n")
+								# elif str(all_labels[item]) == "2":
+								# 	w.write (" ".join(tweets) + " NOT\n")
 
 
 if __name__ == "__main__":
