@@ -320,7 +320,9 @@ def model_training(configuration, train_batches, validation_batches, number):
 									# print (type(bad_word))
 									# print (type(all_text[item]))
 									# print (all_text[item])
-									if int(bad_word) in all_text[item]:
+									print (type(bad_word))
+									print (type(all_text[item][0]))
+									# if int(bad_word) in all_text[item]:
 										print (bad_word)
 										print ("bad word")
 										print (all_labels[item])
