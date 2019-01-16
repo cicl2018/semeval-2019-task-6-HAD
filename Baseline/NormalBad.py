@@ -324,14 +324,11 @@ def model_training(configuration, train_batches, validation_batches, number):
 										tweets.append(bit.split("\t")[0])
 										break
 
-							print (bad_list)
-							# for bad_word in off.readlines():
-							# 	print (bad_word)
-								# print (tweets)
-								# if bad_word in tweets:
-								# 	print (bad_word)
-								# 	print ("bad word")
-								# 	print (all_labels[item])
+							for bad_word in bad_list:
+								if bad_word in tweets:
+									print (bad_word)
+									print ("bad word")
+									print (tweets)
 					
 							# if str(all_labels[item]) == "0":
 							# 	w.write(" ".join(tweets) + " LOSS\n")
