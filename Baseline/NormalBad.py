@@ -188,11 +188,11 @@ def lexicon_read(filename, type):
 
 
 def lexicon_recode(lex, words, labels, train=False):
-	with open ("off.txt", "r+") as badwords:
-		with open ("offNew.txt", "w+") as badwordswrite:
-			for line in badwords.readlines():
-				if len(line.strip()) > 0:
-					badwordswrite.write(str(words.num(line.strip(), train)) + " \n")
+	# with open ("off.txt", "r+") as badwords:
+	# 	with open ("offNew.txt", "w+") as badwordswrite:
+	# 		for line in badwords.readlines():
+	# 			if len(line.strip()) > 0:
+	# 				badwordswrite.write(str(words.num(line.strip(), train)) + " \n")
 	int_lex_task1 = []
 	int_lex_task2 = []
 	int_lex_task3 = []
