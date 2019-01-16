@@ -162,6 +162,10 @@ def pre_processing(text):
 	text = re.sub(r"@[^\s]+", "", text)
 	text = text.lower()
 	text = text.replace("URL", "")
+	text = text.replace(".", "")
+	text = text.replace('"', "")
+	text = text.replace(':', "")
+	text = text.replace("'", "")
 	text = text.replace("=", " ")
 	# text = re.sub(r"^[^\d]$", "", text)
 	# parse hashtags
@@ -302,15 +306,7 @@ def model_training(configuration, train_batches, validation_batches, number):
 			precision /= validation_batches.shape[0]
 			recall /= validation_batches.shape[0]
 			f1 /= validation_batches.shape[0]
-
-
-			# with open ("offNew.txt", "r+") as off:
-			# 	for batch in range(validation_batches.shape[0]):
-			# 		for element in off.readlines():
-			# 			for item in range(len(validation_batches[batch])):
-			# 				if int(element) in validation_batches[batch][item]:
-			# 					validation_labels[batch][item][1] = 1
-							
+			
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
 			
 			with open ("off.txt", "r") as off:
