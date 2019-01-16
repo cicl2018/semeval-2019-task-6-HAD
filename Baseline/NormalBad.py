@@ -192,7 +192,7 @@ def lexicon_recode(lex, words, labels, train=False):
 		with open ("offNew.txt", "w+") as badwordswrite:
 			for line in badwords.readlines():
 				if len(line.strip()) > 0:
-					badwordswrite.write(str(words.number(line.strip(), train)) + " \n")
+					badwordswrite.write(str(words.num(line.strip(), train)) + " \n")
 	int_lex_task1 = []
 	int_lex_task2 = []
 	int_lex_task3 = []
