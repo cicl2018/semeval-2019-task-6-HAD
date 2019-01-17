@@ -295,6 +295,8 @@ def model_training(configuration, train_batches, validation_batches, number):
 						tweets = []
 						for element in all_text[item]:
 							for bit in data:
+								if (len(bit.split("\t") < 3)):
+									print (bit.split("\t"))
 								if str(element) == str(bit.split("\t")[1].replace("\n", "")):
 									tweets.append(bit.split("\t")[0])
 									break
