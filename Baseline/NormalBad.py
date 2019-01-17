@@ -159,37 +159,45 @@ class Numbers:
 
 def pre_processing(text):
 	# @ striping
+	# # USER removal
+	text = text.replace("@USER", "")
+	text = re.sub(r"[^\s]+@[^\s]+", "", text)
 	text = re.sub(r"@[^\s]+", "", text)
-	text = text.lower()
 	text = text.replace("URL", "")
+	text = text.lower()
+	text = text.replace("…", "")
 	text = text.replace(".", "")
 	text = text.replace('"', "")
 	text = text.replace(':', "")
 	text = text.replace("'", "")
+	text = text.replace("/", " ")
+	text = text.replace(",", " ")
+	text = text.replace("|", " ")
+	text = text.replace("~", " ")
+	text = text.replace("“", " ")
 	text = text.replace("=", " ")
-	# text = re.sub(r"^[^\d]$", "", text)
+	text = text.replace("$", "")
+	text = text.replace("£", "")
+	text = re.sub(r"^[^\d]$", "", text)
 	# parse hashtags
 	if not re.match(r"#[^\s]+", text) == None:
 		values = re.match(r"#[^\s]+", text).group()
 		text = re.sub(r"#[^\s]+", tw.segment(values), text)
-	# # USER removal
-	text = text.replace("@USER", "")
+
 	# # URL removal 
 	text = text.replace("#", "")
 	return text
 
 
-def lexicon_read(filename, type):
+def lexicon_read(filename):
 	with open(filename, "r") as f:
 		lex = {}
 		for line in f:
 			fields = line.split("\t")
 			if len(fields) > 1 :
 				# lex[pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}, "Task2":{fields[3].strip():1.0}, "Task3":{fields[4].strip():1.0}}
-				if type == "TRAIN":
-					lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}}
-				else:
-					lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{"OFF":1.0}}
+				lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}}
+
 		return lex
 
 
@@ -347,8 +355,8 @@ if __name__ == "__main__":
 	labels = Numbers()
 
 	# Read training, validation, and embedding whole_batch_data.
-	train_lexicon = lexicon_read(sys.argv[1], "TRAIN")
-	validation_lexicon = lexicon_read(sys.argv[2], "TEST")
+	train_lexicon = lexicon_read(sys.argv[1])
+	validation_lexicon = lexicon_read(sys.argv[2])
 	
 
 	train_lexicon = lexicon_recode(train_lexicon, words, labels, train=True)
