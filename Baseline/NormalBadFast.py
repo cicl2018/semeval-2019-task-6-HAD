@@ -219,14 +219,26 @@ def lexicon_recode(lex, words, labels, train=False):
 			int_sentence = []
 			for word in line.split():
 				sumC = 0.0
-				with open("cbow.vec", 'r+') as outfile:
-					for line in outfile.readlines():
-						if word in line:
-							for element in line.partition(' ')[2].split(" "):
-								if not re.match("^\d+?\.\d+?$", element) is None:
-									sumC += float(element)
-							int_sentence.append(sumC + 1.0)
-							break
+				from gensim.models import KeyedVectors
+				model = KeyedVectors.load_word2vec_format("skipgram.vec")
+				try:
+					value = model.most_similar(word)
+					int_sentence.append(value[0][1])
+					# print (value[0][1])
+				except Exception as e:
+					int_sentence.append(word)
+
+				# int_sentence.append(value)
+				# with open("skipgram.vec", 'r+') as outfile:
+				# 	for line in outfile.readlines():
+				# 		if word in line:
+				# 			print (line.split(" ")[1:])
+				# 			# for element in line.partition(' ')[2].split(" "):
+				# 			# 	print (element)
+				# 				# if not re.match("^\d+?\.\d+?$", element) is None:
+				# 				# 	sumC += float(element)
+				# 			int_sentence.append([line[1:]])
+				# 			break
 
 			int_tags_task1 = {}
 			int_tags_task2 = {}
