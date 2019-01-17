@@ -338,10 +338,17 @@ def model_training(configuration, train_batches, validation_batches, number):
 								search = bad_word.replace("\n", "")
 								search = search.replace("\r", "")
 								for letters in tweets:
-
-									if bad_word == letters:
+									print ("##########")
+									print (type(letters))
+									print (type(search))
+									print (search)
+									print (letters)
+									print ("##########")
+									if search == letters:
+										print ("@@@@@@@@@@@@")
 										print (tweets)
 										print (search)
+										print ("@@@@@@@@@@@@")
 										all_labels[item] = 1
 					
 							if str(all_labels[item]) == "0":
