@@ -224,8 +224,10 @@ def lexicon_recode(lex, words, labels, train=False):
 				try:
 					value = model.most_similar(word)
 					int_sentence.append(value[0][1])
+					writing.write(word + "\t" + str(value[0][1]) + "\n")
 					# print (value[0][1])
 				except Exception as e:
+					writing.write(word + "\t" + str(word) + "\n")
 					int_sentence.append(word)
 
 				# int_sentence.append(value)
