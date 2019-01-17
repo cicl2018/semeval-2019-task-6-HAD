@@ -337,11 +337,12 @@ def model_training(configuration, train_batches, validation_batches, number):
 							for bad_word in bad_list:
 								search = bad_word.replace("\n", "")
 								search = search.replace("\r", "")
-								print (tweets)
-								print (search)
-								if bad_word in tweets:
-									all_labels[item] = 1
-									break
+								for letters in tweets:
+									print (tweets)
+									print (search)
+									if bad_word == letters:
+										all_labels[item] = 1
+										break
 					
 							if str(all_labels[item]) == "0":
 								w.write(" ".join(tweets) + " LOSS\n")
