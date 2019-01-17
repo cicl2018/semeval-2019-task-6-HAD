@@ -226,7 +226,7 @@ def lexicon_recode(lex, words, labels, train=False):
 					int_sentence.append(value[0][1])
 					writing.write(word + "\t" + str(words.num(str(value[0][0])) + "\n")
 					# print (value[0][1])
-				except:
+				except Exception:
 					writing.write(word + "\t" + str(word) + "\n")
 					int_sentence.append(str(words.num(str(word))
 
