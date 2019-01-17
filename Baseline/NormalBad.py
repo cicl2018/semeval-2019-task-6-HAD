@@ -335,9 +335,8 @@ def model_training(configuration, train_batches, validation_batches, number):
 										break
 
 							for bad_word in bad_list:
-								if bad_word.replace("\n", "") in tweets:
-									if bad_word == "ass":
-										print (bad_word)
+								if bad_word in tweets:
+									print (bad_word)
 									all_labels[item] = 1
 									break
 					
