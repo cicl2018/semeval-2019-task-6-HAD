@@ -178,6 +178,10 @@ def pre_processing(text):
 	text = text.replace("=", " ")
 	text = text.replace("$", "")
 	text = text.replace("£", "")
+	text = text.split("!")
+	text = " ".join(text)
+	text = text.split("?")
+	text = " ".join(text)
 	text = re.sub(r"^[^\d]$", "", text)
 	# parse hashtags
 	if not re.match(r"#[^\s]+", text) == None:
