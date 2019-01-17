@@ -343,7 +343,6 @@ def model_training(configuration, train_batches, validation_batches, number):
 										print (tweets)
 										print (search)
 										all_labels[item] = 1
-										break
 					
 							if str(all_labels[item]) == "0":
 								w.write(" ".join(tweets) + " LOSS\n")
