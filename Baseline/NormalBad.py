@@ -219,7 +219,7 @@ def lexicon_recode(lex, words, labels, train=False):
 			int_sentence = []
 			for word in line.split():
 				sumC = 0.0
-				with open("cbow.vec", 'r+') as outfile:
+				with open("skipgram.vec", 'r+') as outfile:
 					for line in outfile.readlines():
 						if word in line:
 							for element in line.partition(' ')[2].split(" "):
