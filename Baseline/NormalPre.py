@@ -31,7 +31,7 @@ class Configuration:
 	LSTM_SZ = 200
 	ratio_dropout = 0.95
 	embedding_size = 100
-	rate_learning = 0.005
+	rate_learning = 0.01
 
 class PredictionPhase(Enum):
 	Training = 0
