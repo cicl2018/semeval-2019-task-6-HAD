@@ -228,7 +228,7 @@ def lexicon_recode(lex, words, labels, train=False):
 					# print (value[0][1])
 				except Exception as e:
 					writing.write(word + "\t" + str(word) + "\n")
-					int_sentence.append(word)
+					int_sentence.append(str(words.num(str(word))
 
 				# int_sentence.append(value)
 				# with open("skipgram.vec", 'r+') as outfile:
