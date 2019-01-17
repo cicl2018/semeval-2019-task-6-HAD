@@ -218,8 +218,15 @@ def lexicon_recode(lex, words, labels, train=False):
 		for (line, tags) in lex.items():
 			int_sentence = []
 			for word in line.split():
-				writing.write(word + "\t" + str(words.num(str(word), True)) + "\n")
-				int_sentence.append(words.num(word, train))
+				sumC = 0.0
+				with open("cbow.vec", 'r+') as outfile:
+					for line in outfile.readlines():
+						if word in line:
+							for element in line.partition(' ')[2].split(" "):
+								if not re.match("^\d+?\.\d+?$", element) is None:
+									sumC += float(element)
+							int_sentence.append(sumC + 1.0)
+							break
 
 			int_tags_task1 = {}
 			int_tags_task2 = {}
