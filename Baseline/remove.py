@@ -17,14 +17,15 @@ with open ("dataset.txt", "r") as reading:
         save = line.split("    ")[2].lower().replace("@", "").replace("(", "").replace(")", "")
         text += save
 
-# text = 'While in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
 
 
 tokenized_text = word_tokenize(text.strip().replace("\n", " "))
 classified_text = st.tag(tokenized_text)
 
-print(classified_text)
-
+with open ("combine.txt", "w+") as making:
+    for word in classified_text:
+        if not word[1] == 'O':
+            making.write(word[0] + "\n")
 
 
 # from random import randint
