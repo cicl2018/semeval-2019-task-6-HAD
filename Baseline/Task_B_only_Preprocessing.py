@@ -25,7 +25,7 @@ tw = Segmenter(corpus="twitter")
 # Configuration class for training model.
 class Configuration:
 	num_epochs = 500
-	size_batch = 43
+	size_batch = 30
 	max_time_steps = 40
 	LSTM_CT = 4
 	LSTM_SZ = 200
@@ -144,7 +144,6 @@ class Numbers:
 				self.vector_to_number[values] = n
 				self.number_to_vector.append(values)
 			else:
-				print (values)
 				return 0
 
 		return n
@@ -298,6 +297,7 @@ def model_training(configuration, train_batches, validation_batches, number):
 				recall += metrics.recall_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				f1 += metrics.f1_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				for item in range(len(hpl.tolist())):
+					print (hpl.tolist()[item])
 					all_text.append(validation_batches[batch_current][item].tolist())
 					all_labels.append(str(hpl.tolist()[item]))
 
@@ -329,9 +329,9 @@ def model_training(configuration, train_batches, validation_batches, number):
 						if str(all_labels[item]) == "0":
 							w.write(" ".join(tweets) + " LOSS\n")
 						elif str(all_labels[item]) == "1":
-							w.write (" ".join(tweets) + " OFF\n")
+							w.write (" ".join(tweets) + " TIN\n")
 						elif str(all_labels[item]) == "2":
-							w.write (" ".join(tweets) + " NOT\n")
+							w.write (" ".join(tweets) + " UNT\n")
 
 
 if __name__ == "__main__":
