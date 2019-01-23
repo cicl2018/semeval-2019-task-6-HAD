@@ -76,10 +76,12 @@ class LSTMModel:
 		logits = tf.matmul(hidden_var[-1].h, w) + b
 
 		if phase == PredictionPhase.Training or PredictionPhase.Validating:
-			loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
+			# loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
+			loss = tf.nn.weighted_cross_entropy_with_logits(targets=self.self_y, logits=logits, pos_weight=0.5)
 			self.self_loss = loss = tf.reduce_sum(loss)
 
 		if phase == PredictionPhase.Training:
+			loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
 			self.self_train_op = tf.train.AdamOptimizer(configuration.rate_learning).minimize(loss)
 			self.self_probs = probs = tf.nn.softmax(logits)
 
