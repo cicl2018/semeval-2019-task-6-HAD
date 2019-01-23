@@ -297,7 +297,6 @@ def model_training(configuration, train_batches, validation_batches, number):
 				recall += metrics.recall_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				f1 += metrics.f1_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
 				for item in range(len(hpl.tolist())):
-					print (hpl.tolist()[item])
 					all_text.append(validation_batches[batch_current][item].tolist())
 					all_labels.append(str(hpl.tolist()[item]))
 
