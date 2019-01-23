@@ -4,8 +4,8 @@ from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 
 
-st = StanfordNERTagger('/Users/himanshubansal/Downloads/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
-					   '/Users/himanshubansal/Downloads/stanford-ner-2018-10-16/stanford-ner.jar',
+st = StanfordNERTagger('english.all.3class.distsim.crf.ser.gz',
+					   'stanford-ner.jar',
 					   encoding='utf-8')
 
 
