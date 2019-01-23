@@ -14,7 +14,7 @@ text = ""
 with open ("dataset.txt", "r") as reading:
     for line in reading.readlines():
         # print (line.split("    ")[2])
-        save = line.split("    ")[2].lower().replace("@", "").replace("(", "").replace(")", "")
+        save = line.split("    ")[2].replace("@", "").replace("(", "").replace(")", "")
         text += save
 
 
@@ -25,7 +25,8 @@ classified_text = st.tag(tokenized_text)
 with open ("combine.txt", "w+") as making:
     for word in classified_text:
         if not word[1] == 'O':
-            making.write(word[0] + "\n")
+        
+            making.write(word[0].lower() + "\n")
 
 
 # from random import randint
