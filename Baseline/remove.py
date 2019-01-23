@@ -25,8 +25,8 @@ classified_text = st.tag(tokenized_text)
 with open ("combine.txt", "w+") as making:
     for word in classified_text:
         if not word[1] == 'O':
-        
-            making.write(word[0].lower() + "\n")
+            if word[1] == 'PERSON' or word[1] == 'ORGANIZATION': 
+                 making.write(word[0].lower() + "\n")
 
 
 # from random import randint
