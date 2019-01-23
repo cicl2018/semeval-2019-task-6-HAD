@@ -14,18 +14,16 @@ text = ""
 with open ("dataset.txt", "r") as reading:
     for line in reading.readlines():
         # print (line.split("    ")[2])
-        save = line.split("    ")[2]
-        save = save.split(" ")[2:]
-        save = save[:-1]
+        save = line.split("    ")[2].lower().replace("@", "").replace("(", "").replace(")", "")
         text += save
 
 # text = 'While in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
 
 
-# tokenized_text = word_tokenize(text.strip().replace("\n", " "))
-# classified_text = st.tag(text)
+tokenized_text = word_tokenize(text.strip().replace("\n", " "))
+classified_text = st.tag(tokenized_text)
 
-# print(classified_text)
+print(classified_text)
 
 
 
