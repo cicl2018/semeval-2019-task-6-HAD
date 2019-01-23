@@ -26,7 +26,8 @@ with open ("combine.txt", "w+") as making:
     for word in classified_text:
         if not word[1] == 'O':
             if word[1] == 'PERSON' or word[1] == 'ORGANIZATION': 
-                 making.write(word[0].lower() + "\n")
+                if len(word[0]) > 2:
+                    making.write(word[0].lower() + "\n")
 
 
 # from random import randint
