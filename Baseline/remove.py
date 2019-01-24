@@ -30,19 +30,25 @@
 #                     making.write(word[0].lower() + "\n")
 
 
-from random import randint
-with open("test1.tsv", "w+") as wt:
-    with open("test_b.tsv", "r") as rt:
-        with open("text.txt", "r") as rttext:
-            p = rttext.readlines()
-            lines = rt.readlines()
-            for line in range(len(lines)):
-                pred = p[line].split("\t")
-                save = lines[line].split("\t")
-                wt.write(lines[line].replace("\n", "\t") + "OFF\t" + pred[1].replace("\n", "\t") + "UNI\n")
+# from random import randint
+# with open("test1.tsv", "w+") as wt:
+#     with open("test_b.tsv", "r") as rt:
+#         with open("text.txt", "r") as rttext:
+#             p = rttext.readlines()
+#             lines = rt.readlines()
+#             for line in range(len(lines)):
+#                 pred = p[line].split("\t")
+#                 save = lines[line].split("\t")
+#                 wt.write(lines[line].replace("\n", "\t") + "OFF\t" + pred[1].replace("\n", "\t") + "UNI\n")
                 # if randint(0, 1) == 0:
                 #     wt.write(lines[line].replace("\n", "\t") + "OFF\t" + "UNT\t" + "UNI\n")
                 # elif randint(0, 1) == 1:
                 #     wt.write(lines[line].replace("\n", "\t") + "OFF\t" + "UNT\t" + "UNI\n")
                 # else:
                 #     wt.write(lines[line].replace("\n", "\t") + "OFF\t" + "UNT\t" + "UNI\n")   
+
+with open("task_b.csv", "w+") as rt:
+    with open("result.txt", "r") as rttext: 
+        for line in rttext.readlines():
+            values = line.split(" ")
+            rt.write(values[0] + ", " + values[-1:][0].replace("\n", "") + "\n")

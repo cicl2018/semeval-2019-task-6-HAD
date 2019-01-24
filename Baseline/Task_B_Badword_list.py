@@ -25,7 +25,7 @@ tw = Segmenter(corpus="twitter")
 # Configuration class for training model.
 class Configuration:
 	num_epochs = 500
-	size_batch = 30
+	size_batch = 43
 	max_time_steps = 40
 	LSTM_CT = 4
 	LSTM_SZ = 200
@@ -76,13 +76,10 @@ class LSTMModel:
 		logits = tf.matmul(hidden_var[-1].h, w) + b
 
 		if phase == PredictionPhase.Training or PredictionPhase.Validating:
-			# loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
-			loss = tf.nn.weighted_cross_entropy_with_logits(targets=self.self_y, logits=logits, pos_weight=0.5)
+			loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
 			self.self_loss = loss = tf.reduce_sum(loss)
 
 		if phase == PredictionPhase.Training:
-			# configuration.rate_learning += 0.005
-			loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
 			self.self_train_op = tf.train.AdamOptimizer(configuration.rate_learning).minimize(loss)
 			self.self_probs = probs = tf.nn.softmax(logits)
 
@@ -147,6 +144,7 @@ class Numbers:
 				self.vector_to_number[values] = n
 				self.number_to_vector.append(values)
 			else:
+				print (values)
 				return 0
 
 		return n
@@ -160,7 +158,6 @@ class Numbers:
 
 
 def pre_processing(text):
-
 	# @ striping
 	# # USER removal
 	text = text.replace("@USER", "")
@@ -206,8 +203,12 @@ def lexicon_read(filename):
 				lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{fields[3].strip():1.0}}
 		return lex
 
-
 def lexicon_recode(lex, words, labels, train=False):
+	# with open ("off.txt", "r+") as badwords:
+	# 	with open ("offNew.txt", "w+") as badwordswrite:
+	# 		for line in badwords.readlines():
+	# 			if len(line.strip()) > 0:
+	# 				badwordswrite.write(str(words.num(line.strip(), train)) + " \n")
 	int_lex_task1 = []
 	int_lex_task2 = []
 	int_lex_task3 = []
@@ -215,8 +216,15 @@ def lexicon_recode(lex, words, labels, train=False):
 		for (line, tags) in lex.items():
 			int_sentence = []
 			for word in line.split():
-				writing.write(word + "\t" + str(words.num(str(word), True)) + "\n")
-				int_sentence.append(words.num(word, train))
+				sumC = 0.0
+				with open("skipgram.vec", 'r+') as outfile:
+					for line in outfile.readlines():
+						if word in line:
+							for element in line.partition(' ')[2].split(" "):
+								if not re.match("^\d+?\.\d+?$", element) is None:
+									sumC += float(element)
+							int_sentence.append(sumC + 1.0)
+							break
 
 			int_tags_task1 = {}
 			int_tags_task2 = {}
@@ -315,25 +323,35 @@ def model_training(configuration, train_batches, validation_batches, number):
 			precision /= validation_batches.shape[0]
 			recall /= validation_batches.shape[0]
 			f1 /= validation_batches.shape[0]
-
+			
 			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
+			
+			with open ("combine.txt", "r") as off:
+				bad_list = off.readlines()
 			with open (str(f1 * 100) + ".txt", "w+") as w:
-				with open("numbers.txt", "r+") as f:
-					data = set(f.readlines())
-					for item in range(len(all_text)):
-						tweets = []
-						for element in all_text[item]:
-							for bit in data:
-								if str(element) == str(bit.split("\t")[1].replace("\n", "")):
-									tweets.append(bit.split("\t")[0])
-									break
-						
-						if str(all_labels[item]) == "0":
-							w.write(" ".join(tweets) + " LOSS\n")
-						elif str(all_labels[item]) == "1":
-							w.write (" ".join(tweets) + " UNT\n")
-						elif str(all_labels[item]) == "2":
-							w.write (" ".join(tweets) + " TIN\n")
+					with open("numbers.txt", "r+") as f:
+						data = set(f.readlines())
+						for item in range(len(all_text)):
+							tweets = []
+							for element in all_text[item]:
+								for bit in data:
+									if str(element) == str(bit.split("\t")[1].replace("\n", "")):
+										tweets.append(bit.split("\t")[0])
+										break
+
+							for bad_word in bad_list:
+								search = bad_word.replace("\n", "")
+								search = search.replace("\r", "")
+								for letters in tweets:
+									if search == letters:
+										all_labels[item] = 2
+					
+							if str(all_labels[item]) == "0":
+								w.write(" ".join(tweets) + " LOSS\n")
+							elif str(all_labels[item]) == "1":
+								w.write (" ".join(tweets) + " UNT\n")
+							elif str(all_labels[item]) == "2":
+								w.write (" ".join(tweets) + " TIN\n")
 
 
 if __name__ == "__main__":
