@@ -265,8 +265,9 @@ def model_training(configuration, train_batches, validation_batches, number):
 	validation_batches, validation_lens, validation_labels = validation_batches
 	n_chars = max(np.amax(validation_batches), np.amax(train_batches)) + 1
 	tf.reset_default_graph()
+	gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)
 
-	with tf.Session() as sess:
+	with tf.Session(config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
 		with tf.variable_scope("model", reuse=False):
 			model_training = LSTMModel( configuration, train_batches, train_lens, train_labels, n_chars, number,
 				phase=PredictionPhase.Training)
@@ -348,6 +349,10 @@ if __name__ == "__main__":
 	if len(sys.argv) != 3:
 		sys.stderr.write("Please Use the Both files that are: %s Training Test\n" % sys.argv[0])
 		sys.exit(1)
+
+	if 'session' in locals() and session is not None:
+		print('Close interactive session')
+		session.close()
 
 	configuration = Configuration()
 
