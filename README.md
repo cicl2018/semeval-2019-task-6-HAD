@@ -34,7 +34,7 @@ We are using an LSTM based classifier
 ### Sub-task C: Approaches
 1. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  <br/>
 2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets, which split by categories: (IND), (GRP) and (OTH). <br/>
-3. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database, (see Sub-task C: 2) and personal pronouns, including their contractions.  <br/>
-All datasets can be issued via mail.
+3. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database, (see Sub-task C: 2) and personal pronouns, including their contractions. 
+###  All datasets can be issued via mail.
 
 
