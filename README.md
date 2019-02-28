@@ -11,9 +11,9 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
  - **29 Jan 2019:** A test data release - **31 Jan 2019:** Submission deadline  <br/>
 
 ## Contributors 
-**Himanshu Bansal** Univesity of Tübingen <br/>
-**Daniel Nagel** University of Tübingen <br/>
-**Anita Soloveva**  Lomonosov MSU, University of Tübingen <br/>
+**Himanshu Bansal** Univesity of Tübingen himanshu.bansal@student.uni-tuebingen.de <br/>
+**Daniel Nagel** University of Tübingen daniel.nagel@student.uni-tuebingen.de <br/>
+**Anita Soloveva**  Lomonosov MSU, University of Tübingen anita.soloveva@student.uni-tuebingen.de <br/>
 
 ## Preprocessing
 1. Lowercasing <br/>
