@@ -16,19 +16,30 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 **Anita Soloveva**  Lomonosov MSU, University of Tübingen <br/>
 
 ## Preprocessing
+1. Lowercasing <br/>
+2. Removing URLs, @USER, all the following charachters  “ :. , — ˜ ”, digits and single quotation marks except for abbreviations and possessors (e.g. u’re → u’re, but about’ → about) <br/>
+3. Using ‘=’, ‘!’, ‘?’ and ‘/’ as token splitters  (e.g. something!important → something important) <br/>
+4. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
 
-1. Removing URLs and @USER <br/>
-2. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
+## Model
+We are using an LSTM based classifier
+### Sub-task A: Approaches
+1. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  <br/>
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created offensive word list <br/>
+3. Parsing hashtags + LSTM model (architecture parameters are optimized by SVM predictions)
+### Sub-task B: Approaches
+1.  All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions) <br/>
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets (can be issued). A large part is [names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia,
+Brazil, India and Spain, since these countries
+have the most Twitter users2
+and Iran, Iraq,
+Turkey, Russia and Germany, because we
+predicted a possible aggression towards the
+users from these countries](https://www.socialbakers.
+com/statistics/twitter/profiles/).
 
-## Our approaches
-
-1. We are using [Long short-term memory network (LSTM) model](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/script.py). <br/>
-2. LSTM with fasttext vectors <br/>
-### Sub-task A
-1. Using an additional preprocessed training set of tweets <br/>
-2. Postprocessing with emojis set and an offensive word list
-### Sub-task B & Sub-task C
+### Sub-task C: Approaches
 1. Using a list of ethnic slurs
-2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain](https://www.socialbakers.com/statistics/twitter/profiles/)
+2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain] (https://www.socialbakers.com/statistics/twitter/profiles/)
 
 
