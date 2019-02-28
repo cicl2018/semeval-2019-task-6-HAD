@@ -24,7 +24,7 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 ## Model
 We are using an LSTM based classifier
 ### Sub-task A: Approaches
-1. All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  <br/>
+[1](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_only_Preprocessing.py). All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  <br/>
 2. All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  + Postprocessing with manually created offensive word list <br/>
 3. Parsing hashtags + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))
 ### Sub-task B: Approaches
