@@ -29,10 +29,12 @@ We are using an LSTM based classifier
 3. Parsing hashtags + LSTM model (architecture parameters are optimized by SVM predictions)
 ### Sub-task B: Approaches
 1.  All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions) <br/>
-2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets (can be issued). A large part is [names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia, Brazil, India and Spain, Iran, Iraq, Turkey, Russia and Germany](https://www.socialbakers.com/statistics/twitter/profiles/).
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets. A large part is [the names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia, Brazil, India and Spain, Iran, Iraq, Turkey, Russia and Germany](https://www.socialbakers.com/statistics/twitter/profiles/).
 
 ### Sub-task C: Approaches
-1. Using a list of ethnic slurs
-2. Using a list of [top twitter profiles from United States, United Kindom, Saudi Arabia, Brazil and Spain] (https://www.socialbakers.com/statistics/twitter/profiles/)
+1. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  <br/>
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets, which split by categories: (IND), (GRP) and (OTH). <br/>
+3. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database, (see Sub-task C: 2) and personal pronouns, including their contractions.  <br/>
+All datasets can be issued via mail.
 
 
