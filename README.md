@@ -29,14 +29,7 @@ We are using an LSTM based classifier
 3. Parsing hashtags + LSTM model (architecture parameters are optimized by SVM predictions)
 ### Sub-task B: Approaches
 1.  All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions) <br/>
-2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets (can be issued). A large part is [names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia,
-Brazil, India and Spain, since these countries
-have the most Twitter users2
-and Iran, Iraq,
-Turkey, Russia and Germany, because we
-predicted a possible aggression towards the
-users from these countries](https://www.socialbakers.
-com/statistics/twitter/profiles/).
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets (can be issued). A large part is [names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia, Brazil, India and Spain, since these countries have the most Twitter users and Iran, Iraq, Turkey, Russia and Germany, because we predicted a possible aggression towards the users from these countries](https://www.socialbakers.com/statistics/twitter/profiles/).
 
 ### Sub-task C: Approaches
 1. Using a list of ethnic slurs
