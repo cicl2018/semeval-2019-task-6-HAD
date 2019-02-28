@@ -24,9 +24,9 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 ## Model
 We are using an LSTM based classifier
 ### Sub-task A: Approaches
-1. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  <br/>
-2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created offensive word list <br/>
-3. Parsing hashtags + LSTM model (architecture parameters are optimized by SVM predictions)
+1. All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  <br/>
+2. All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  + Postprocessing with manually created offensive word list <br/>
+3. Parsing hashtags + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))
 ### Sub-task B: Approaches
 1.  All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions) <br/>
 2. All preprocessing steps + LSTM model (architecture parameters are optimized by SVM predictions)  + Postprocessing with manually created  database of potential insult victims as targets. A large part is [the names of representatives of top twitter profiles from the USA, the UK, Saudi Arabia, Brazil, India and Spain, Iran, Iraq, Turkey, Russia and Germany](https://www.socialbakers.com/statistics/twitter/profiles/).
