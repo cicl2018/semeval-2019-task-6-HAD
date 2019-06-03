@@ -1,0 +1,511 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Apr 26 15:27:47 2019
+
+@author: aniton
+"""
+
+"""
+Authors:	Himanshu Bansal, 4232858
+			Daniel Nagel,  3098420
+			Anita Soloveva, 4265100
+Description: 
+Dependency: Preinstalled Dataset for ekphrasis 
+"""
+
+import sys
+import re
+import numpy as np
+from enum import Enum
+from sklearn import metrics
+import re
+import tensorflow as tf
+from tensorflow.contrib import rnn
+from ekphrasis.classes.segmenter import Segmenter
+import warnings
+warnings.simplefilter("ignore")
+# Twitter Hashtag Parser 
+tw = Segmenter(corpus="twitter")
+
+# Configuration class for training model.
+class Configuration:
+	num_epochs = 500
+	size_batch = 43
+	max_time_steps = 43
+	LSTM_CT = 4
+	LSTM_SZ = 200
+	ratio_dropout = 0.05
+	embedding_size = 10
+	rate_learning = 0.003
+
+class PredictionPhase(Enum):
+	Training = 0
+	Validating = 1
+	Prediction = 2
+
+class LSTMModel:
+	def __init__(self, configuration, batch_current, lens_batch, label_batch, n_chars, number, phase = PredictionPhase.Prediction):
+		size_batch = batch_current.shape[1]
+		size_input = batch_current.shape[2]
+		size_label = label_batch.shape[2]
+		print(batch_current.shape[2])
+
+		# This tensor provides the actual num of time steps for each
+		# instance.
+		self.self_lens = tf.placeholder(tf.int32, shape=[size_batch])       
+         
+		# The integer-encoded words. size_input is the (maximum) num of
+		# time steps.
+		self.self_x = tf.placeholder(tf.int32, shape=[size_batch, size_input])
+
+		
+		# The label distribution.
+		if phase != PredictionPhase.Prediction:
+			self.self_y = tf.placeholder(tf.float32, shape=[size_batch, size_label])
+		with tf.device('/gpu:0'):
+		# convert to embeddings
+				embedding = tf.Variable(tf.random_uniform([n_chars,configuration.embedding_size], -400, 400))
+#		embedding = tf.get_variable("embeddings", shape = [n_chars, configuration.embedding_size])
+				input_layers = tf.nn.embedding_lookup(embedding, self.self_x)
+		# make a bunch of LSTM cells and link them
+		# use rnn.DropoutWrapper instead of tf.nn.dropout because the layers are anonymous
+        # LSTM_fw -- forward direction cell, LSTM_bw -- backward direction cell,
+		LSTM_fw = tf.contrib.rnn.MultiRNNCell([rnn.DropoutWrapper(rnn.BasicLSTMCell(configuration.LSTM_SZ), output_keep_prob = configuration.ratio_dropout) for _ in range(configuration.LSTM_CT)])
+		LSTM_bw = tf.contrib.rnn.MultiRNNCell([rnn.DropoutWrapper(rnn.BasicLSTMCell(configuration.LSTM_SZ), output_keep_prob = configuration.ratio_dropout) for _ in range(configuration.LSTM_CT)])		
+		# run the Prediction with variables
+		hidden_var, states  = tf.nn.bidirectional_dynamic_rnn(LSTM_fw, LSTM_bw, input_layers, sequence_length = self.self_lens, dtype = tf.float32)
+		hidden_var = tf.concat(hidden_var, 2)
+		w = tf.get_variable("W", shape=[2*configuration.LSTM_SZ, size_label])
+		# Acording to the structure of MultiRNNCell, The hidden_var[-1] is the final state
+		b = tf.get_variable("b", shape=[1])
+		logits = tf.matmul(hidden_var[-1], w) + b
+#		print(hidden_var[-1])
+#		print(logits)
+#		print(b) 
+#		print(w)
+#		print(logits)
+		if phase == PredictionPhase.Training or PredictionPhase.Validating:
+			loss = tf.nn.softmax_cross_entropy_with_logits(labels=self.self_y, logits=logits)
+			self.self_loss = loss =tf.reduce_sum(loss)
+
+		if phase == PredictionPhase.Training:
+			self.self_train_op = tf.train.AdamOptimizer(configuration.rate_learning).minimize(loss)
+			self.self_probs = probs = tf.nn.softmax(logits)
+
+		if phase == PredictionPhase.Validating:
+			# Highest probability labels of the gold whole_batch_data.
+			gs_labels = tf.argmax(self.self_y, axis=1)
+
+			# Predicted labels
+			self.self_hp_labels = tf.argmax(logits, axis=1)
+
+			correct = tf.equal(self.self_hp_labels, gs_labels)
+			correct = tf.cast(correct, tf.float32)
+			self.self_accuracy = tf.reduce_mean(correct)
+			
+			#self.self_hp_labels = hp_labels
+
+	@property
+	def accuracy(self):
+		return self.self_accuracy
+
+	@property
+	def hp_labels(self) :
+		return self.self_hp_labels
+	
+	@property
+	def lens(self):
+		return self.self_lens
+
+	@property
+	def loss(self):
+		return self.self_loss
+
+	@property
+	def probs(self):
+		return self.self_probs
+
+	@property
+	def train_op(self):
+		return self.self_train_op
+
+	@property
+	def x(self):
+		return self.self_x
+
+	@property
+	def y(self):
+		return self.self_y
+
+
+class Numbers:
+	def __init__(self):
+		self.number_to_vector = list()
+		self.vector_to_number = dict()
+		self.start_index = 1
+
+	def num(self, values, plus_if_not=True):
+		n = self.vector_to_number.get(values)
+
+		if n is None:
+			if plus_if_not:
+				n = len(self.number_to_vector) + self.start_index
+				self.vector_to_number[values] = n
+				self.number_to_vector.append(values)
+			else:
+				print (values)
+				return 0
+
+		return n
+
+	def values(self, num):
+		# self.number_to_vector[num]
+		return tf.gather(self.number_to_vector, num)
+
+	def max_num(self):
+		return len(self.number_to_vector) + 1
+
+
+def pre_processing(text):
+	# @ striping
+	# # USER removal
+	text = text.replace("@USER", "")
+	text = re.sub(r"[^\s]+@[^\s]+", "", text)
+	text = re.sub(r"@[^\s]+", "", text)
+	text = text.replace("URL", "")
+	text = text.lower()
+	text = text.replace("…", "")
+	text = text.replace(".", "")
+	text = text.replace('"', "")
+	text = text.replace(':', "")
+	text = text.replace("'", "")
+	text = text.replace("/", " ")
+	text = text.replace(",", " ")
+	text = text.replace("|", " ")
+	text = text.replace("~", " ")
+	text = text.replace("“", " ")
+	text = text.replace("=", " ")
+	text = text.replace("$", "")
+	text = text.replace("£", "")
+	text = text.split("!")
+	text = " ".join(text)
+	text = text.split("?")
+	text = " ".join(text)
+	text = re.sub(r"^[^\d]$", "", text)
+	# parse hashtags
+	if not re.match(r"#[^\s]+", text) == None:
+		values = re.match(r"#[^\s]+", text).group()
+		text = re.sub(r"#[^\s]+", tw.segment(values), text)
+
+	# # URL removal 
+	text = text.replace("#", "")
+	return text
+
+
+def lexicon_read(filename):
+	with open(filename, "r") as f:
+		lex = {}
+		for line in f:
+			fields = line.split("\t")
+			if len(fields) > 1 :
+				# lex[pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}, "Task2":{fields[3].strip():1.0}, "Task3":{fields[4].strip():1.0}}
+				lex[fields[0] + " " + pre_processing(fields[1])] = {"Task1":{fields[2].strip():1.0}}
+
+		return lex
+
+# use Fasttext skipgram model "skipgram.vec", based on training set vectors.
+def lexicon_recode(lex, words, labels, train=False):
+	# with open ("off.txt", "r+") as badwords:
+	# 	with open ("offNew.txt", "w+") as badwordswrite:
+	# 		for line in badwords.readlines():
+	# 			if len(line.strip()) > 0:
+	# 				badwordswrite.write(str(words.num(line.strip(), train)) + " \n")
+	int_lex_task1 = []
+	int_lex_task2 = []
+	int_lex_task3 = []
+	int_sentence = []
+	int_tags_task1 = {}
+	regex = re.compile(r'^\d{5}\t\d{5}')
+	reg =   re.compile(r'[0][.]\d+')
+	if len(lex) == 13240:
+		f = open("elmo_train.txt", "r")
+	else:
+		f = open("elmo_test.txt", "r")       
+	fast  = f.readlines() 
+	fasts = []
+	i=0             
+	for (line, tags), x in zip(lex.items(), fast):
+			x = x.replace("\n", "")           
+			y = x.split()
+			np.array(y, dtype='f') 
+#			print(y)        
+			for z in y:
+					int_sentence.append(float(z))
+#					print(int_sentence)
+			for (tag, p) in tags["Task1"].items():
+						int_tags_task1[labels.num(tag, train)] = p
+			int_lex_task1.append((int_sentence, int_tags_task1))	
+			i = i+1 
+#			print(int_sentence)
+#			print(i) 		
+#			print(tags)					
+#			print(int_sentence)  									
+			int_sentence = []
+			int_tags_task1 = {} 
+
+		                       
+
+#		print(int_lex_task1)        
+#	from gensim.models import KeyedVectors
+#	with open ("3numberss.txt", "w+") as writing:
+#		for (line, tags) in lex.items():
+#			int_sentence = []
+#			for word in line.split():
+#				sumC = 0.0
+#				model = KeyedVectors.load_word2vec_format("skipgram.vec")
+#				try:
+#					value = model.most_similar(word)
+#					int_sentence.append(value[0][1])
+##					print((str(value[0][1])))
+##					print('ddd')
+#					writing.write(word + "\t" + str(value[0][1]) + "\n")
+#				except Exception as e:
+#					writing.write(word + "\t" + str(word) + "\n")
+#					int_sentence.append(str(words.num(str(word))))
+#			for x in range(len(int_sentence)): 
+#						print(int_sentence[x]) 
+#			print('endstr')
+				# int_sentence.append(value)
+				# with open("skipgram.vec", 'r+') as outfile:
+				# 	for line in outfile.readlines():
+				# 		if word in line:
+				# 			print (line.split(" ")[1:])
+				# 			# for element in line.partition(' ')[2].split(" "):
+				# 			# 	print (element)
+				# 				# if not re.match("^\d+?\.\d+?$", element) is None:
+				# 				# 	sumC += float(element)
+				# 			int_sentence.append([line[1:]])
+				# 			break
+#			for (tag, p) in tags["Task1"].items():
+#				int_tags_task1[labels.num(tag, train)] = p
+#			# for (tag, p) in tags["Task2"].items():
+			# 	int_tags_task2[labels.num(tag, train)] = p
+			# for (tag, p) in tags["Task3"].items():
+			# 	int_tags_task3[labels.num(tag, train)] = p
+			
+		# int_lex_task2.append((int_sentence, int_tags_task2))
+		# int_lex_task3.append((int_sentence, int_tags_task3))
+	# return [int_lex_task1, int_lex_task2, int_lex_task3]
+#	for x in range(len(int_lex_task1)): 
+#		print(int_lex_task1[x])
+	return [int_lex_task1]
+
+def generate_instances( whole_batch_data, max_label, max_time_steps, size_batch=128):
+	batch_num = len(whole_batch_data) // size_batch
+	# We are discarding the last batch_current for now, for simplicity.
+	labels = np.zeros(
+		shape=( batch_num, size_batch, max_label.max_num()), dtype=np.float32)
+	length = np.zeros(
+		shape=( batch_num, size_batch), dtype=np.int32)
+	sentences = np.zeros(
+		shape=( batch_num, size_batch, max_time_steps), dtype=np.int32)
+
+	for batch_current in range(batch_num):
+		for index in range(size_batch):
+			(line, l) = whole_batch_data[(batch_current * size_batch) + index]
+			for label, prob in l.items(): # Add label distribution
+				labels[batch_current, index, label] = prob
+			# Sequence
+			time_step = min(max_time_steps, len(line))
+			# Sequence length (time steps)
+			length[batch_current, index] = time_step
+			# Word characters
+			sentences[batch_current, index, :time_step] = line[:time_step]
+	return (sentences, length, labels)
+
+
+def model_training(configuration, train_batches, validation_batches, number):
+	train_batches, train_lens, train_labels = train_batches
+	validation_batches, validation_lens, validation_labels = validation_batches
+	n_chars = max(np.amax(validation_batches), np.amax(train_batches)) + 1
+	tf.reset_default_graph()
+
+	with tf.Session() as sess:
+		with tf.variable_scope("model", reuse=False):
+			model_training = LSTMModel( configuration, train_batches, train_lens, train_labels, n_chars, number,
+				phase=PredictionPhase.Training)
+
+		with tf.variable_scope("model", reuse=True):
+			validation_model = LSTMModel( configuration, validation_batches, validation_lens, validation_labels, n_chars, number,
+				phase=PredictionPhase.Validating)
+
+		sess.run(tf.global_variables_initializer())
+
+		print("       | Training   |                   Validation                    |")
+		print(" Epoch | Train Loss    | Validation Loss    | accuracy    | Precision   | Recall  | F1      |")
+		print("-------+---------+---------+---------+---------+---------+---------+")
+		for epoch in range(configuration.num_epochs):
+			training_loss = 0.0
+			validation_loss = 0.0
+			accuracy = 0.0
+			precision = 0.0
+			recall = 0.0
+			f1 = 0.0
+
+
+			all_text = []
+			all_labels = []
+			for batch_current in range(validation_batches.shape[0]): # validation on all batches.
+				loss, acc, hpl = sess.run([validation_model.loss, validation_model.accuracy, validation_model.hp_labels], {
+					validation_model.x: validation_batches[batch_current], validation_model.lens: validation_lens[batch_current], validation_model.y: validation_labels[batch_current]})
+				validation_loss += loss
+				accuracy += acc
+				precision += metrics.precision_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
+				recall += metrics.recall_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
+				f1 += metrics.f1_score(np.argmax(np.array(validation_labels[batch_current]).astype(np.int32), axis = 1), hpl, average = "macro")
+				for item in range(len(hpl.tolist())):
+					all_text.append(validation_batches[batch_current][item].tolist())
+					all_labels.append(str(hpl.tolist()[item]))
+
+			
+			for batch_current in range(train_batches.shape[0]): # Training on all batches.
+				loss, _ = sess.run([model_training.loss, model_training.train_op], {
+					model_training.x: train_batches[batch_current], model_training.lens: train_lens[batch_current], model_training.y: train_labels[batch_current]})
+				training_loss += loss
+
+			training_loss /= train_batches.shape[0]
+			validation_loss /= validation_batches.shape[0]
+			accuracy /= validation_batches.shape[0]
+			precision /= validation_batches.shape[0]
+			recall /= validation_batches.shape[0]
+			f1 /= validation_batches.shape[0]
+			regex = re.compile(r'^\d{5}\t\d{5}')
+			tweets =[]
+			print(" % 3d   | % 4.2f | % 4.2f | % 2.2f%% | % 2.2f%% | % 2.2f%% | % 2.2f%% |" % (epoch, training_loss, validation_loss, accuracy * 100, precision * 100, recall * 100, f1 * 100))
+#			with open (str(f1 * 100) + ".txt", "a+") as w:
+#				with open("test.tsv", "r+") as f:
+#			 		data = f.readlines()
+#			 		item = 0 
+#			 		for bit in data:							
+#																						                                               												
+#												tweets.append(bit.split("\t")[0])	
+#												print(bit.split("\t")[0])		 										
+#												print(item)
+#												if str(all_labels[item]) == "0":
+#															w.write(" ".join(tweets) + " LOSS\n")
+#												elif str(all_labels[item]) == "1":
+#															w.write (" ".join(tweets) + " OFF\n")
+#												elif str(all_labels[item]) == "2":
+#															w.write (" ".join(tweets) + " NOT\n")		
+#												tweets = []  
+#												item += 1  
+#												if item >= 860:
+# 													break                                                                
+			with open ("off.txt", "r") as off:
+				bad_list = off.readlines()
+			with open (str(f1 * 100) + ".txt", "w+") as w:
+				with open("test.tsv", "r+") as f:
+			 		data = f.readlines()
+			 		item = 0 
+			 		for bit in data:							
+																						                                               												
+												tweets.append(bit.split("\t")[0])	
+#												print(bit.split("\t")[0])		 										
+#												print(item)
+												for bad_word in bad_list:
+															search = bad_word.replace("\n", "")
+															search = search.replace("\r", "")
+#															print(search)
+#															print(bit.split("\t")[1])
+															strr =   bit.split("\t")[1].split()                                                           
+															for word in strr:                                                            
+																if search == word:
+#																					print(word)                                                                            
+																					all_labels[item] = 1
+																					break
+												if str(all_labels[item]) == "0":
+															w.write(" ".join(tweets) + " LOSS\n")
+												elif str(all_labels[item]) == "1":
+															w.write (" ".join(tweets) + " OFF\n")
+												elif str(all_labels[item]) == "2":
+															w.write (" ".join(tweets) + " NOT\n")		
+												tweets = []  
+												item += 1  
+												if item >= 860:
+ 													break                                          
+#
+
+#					
+#							if str(all_labels[item]) == "0":
+#								w.write(" ".join(tweets) + " LOSS\n")
+#							elif str(all_labels[item]) == "1":
+#								w.write (" ".join(tweets) + " OFF\n")
+#							elif str(all_labels[item]) == "2":
+#								w.write (" ".join(tweets) + " NOT\n")
+
+
+if __name__ == "__main__":
+#	if len(sys.argv) != 2:
+#		sys.stderr.write("Please Use the Both files that are: %s Training Test\n" % sys.argv[0])
+#		sys.exit(1)
+
+	configuration = Configuration()
+
+	# Convert word characters and part-of-speech labels to numeral representation.
+	words = Numbers()
+	labels = Numbers()
+	# Read training, validation, and embedding whole_batch_data.
+	# splitLen = 8605         # 20 lines per file
+	# outputBase = 'output' # output.1.txt, output.2.txt, etc.
+
+	input = open('train1.tsv', 'r')
+	count = 0
+	at = 2
+	dest = None
+	for line in input:
+	 	if count % 2648 == 0:
+	 		if dest: dest.close()
+	 		dest = open(str(at) + '.tsv', 'w')
+	 		at += 1
+	 	dest.write(line)
+	 	count += 1
+
+	for item in range(1, 6):
+		filenames = [ str(2) + '.tsv', str(3) + '.tsv', str(4) + '.tsv', str(5) + '.tsv']
+		with open('tutututu.tsv', 'w') as outfile:
+			for fname in filenames:
+				with open(fname) as infile:
+					for line in infile:
+						outfile.write(line)
+	print ("#################################")
+	train_lexicon = lexicon_read('train1.tsv')
+	validation_lexicon = lexicon_read('test.tsv')
+
+	train_lexicon = lexicon_recode(train_lexicon, words, labels, train=True)
+	validation_lexicon = lexicon_recode(validation_lexicon, words, labels)
+
+		# Generate batches
+	train_batches = generate_instances(
+			train_lexicon[0],
+			labels,
+			configuration.max_time_steps,
+			size_batch=configuration.size_batch)
+		
+	validation_batches = generate_instances(
+			validation_lexicon[0],
+			labels,
+			configuration.max_time_steps,
+			size_batch=configuration.size_batch)
+
+		# Training the model
+	model_training(configuration, train_batches, validation_batches, words)
+
+    
+    
+    
+    
+    
+    
+    
+    		                       
