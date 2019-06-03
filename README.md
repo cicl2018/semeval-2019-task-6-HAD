@@ -22,7 +22,7 @@ Evaluation of Offensive Tweets with target Classification. For more details: [Co
 4. Parsing hashtags (See [Christos Baziotis et. al. 2017](https://github.com/cbaziotis/ekphrasis))<br/>
 
 ## Model
-We are using an LSTM based classifier
+We are using an unidirectional LSTM based classifier
 ### Sub-task A: Approaches
 [1](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_only_Preprocessing.py). All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  <br/>
 [2](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_Badword_list.py). All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv))  + Postprocessing with manually created offensive word list <br/>
