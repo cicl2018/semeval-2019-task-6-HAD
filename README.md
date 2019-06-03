@@ -43,9 +43,9 @@ We are using an unidirectional LSTM based classifier
 BiLSTM based classifier
 
 ## Sub-task A: Approaches
-[1](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_only_Preprocessing.py). All preprocessing steps + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) + Postprocessing with manually created offensive word list <br/>
-[2](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_Badword_list.py). All preprocessing steps + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) with FastText word embeddings + Postprocessing with manually created offensive word list <br/>
-[3](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/Task_A_hashtag_parsing.py). Parsing hashtags + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) with ELMo word embeddings + Postprocessing with manually created offensive word list
+[1](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/tempbi.py). All preprocessing steps + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) + Postprocessing with manually created offensive word list <br/>
+[2](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/fast_res.py). All preprocessing steps + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) with FastText word embeddings + Postprocessing with manually created offensive word list <br/>
+[3](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20A/elmo_res.py). Parsing hashtags + BiLSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-test.tsv)) with ELMo word embeddings + Postprocessing with manually created offensive word list
 
 ###  All datasets can be issued via mail.
 
