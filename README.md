@@ -37,7 +37,7 @@ We are using an unidirectional LSTM based classifier
 [3](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/daniel/Task%20C/Task_C_Badword_list.py). All preprocessing steps + LSTM model (architecture parameters are optimized by [SVM predictions](https://github.com/cicl2018/semeval-2019-task-6-HAD/blob/master/Baseline/svm-predictions-c-test.tsv))  + Postprocessing with manually created  database, (see Sub-task C: 2) and personal pronouns, including their contractions. 
 
 
-###  Post-competition phase
+#  Post-competition phase
 
 ## Model
 BiLSTM based classifier
